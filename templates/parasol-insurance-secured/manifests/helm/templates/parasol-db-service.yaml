@@ -7,7 +7,7 @@ metadata:
     app: parasol-db
 spec:
   ports:
-    - name: postgresql
+    - name: tcp-postgresql
       protocol: TCP
       port: 5432
       targetPort: 5432
