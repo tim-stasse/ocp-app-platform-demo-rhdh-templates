@@ -53,6 +53,9 @@ spec:
           type: string
           description: Additional options to add to the Argo CD Application source spec in YAML format (e.g. helm value overrides, kustomize options, etc.)
           default: ""
+          ui:widget: textarea
+          ui:options:
+            rows: 10
 
     - title: Destination
       required:
@@ -85,6 +88,9 @@ spec:
               automated:
                 prune: true
                 selfHeal: true
+          ui:widget: textarea
+          ui:options:
+            rows: 10
 
   steps:
     - action: kube:apply
