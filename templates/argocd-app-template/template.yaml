@@ -51,7 +51,11 @@ spec:
           title: Extra Source Options
           type: string
           description: Additional options to add to the Argo CD Application source spec in YAML format (e.g. helm value overrides, kustomize options, etc.)
-          default: ""
+          default: |
+            helm:
+              valuesObject:
+                route:
+                  enabled: false
           ui:widget: textarea
           ui:options:
             rows: 5
