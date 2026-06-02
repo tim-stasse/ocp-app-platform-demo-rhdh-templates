@@ -103,7 +103,7 @@ spec:
 
     - id: create-argocd-resources
       name: Create ArgoCD Resources
-      action: argocd:create-resources
+      action: backstage-community-argocd:create-resources
       input:
         appName: ${{ parameters.name }}-bootstrap
         argoInstance: main
