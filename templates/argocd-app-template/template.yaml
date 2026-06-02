@@ -54,7 +54,7 @@ spec:
           default: ""
           ui:widget: textarea
           ui:options:
-            rows: 10
+            rows: 5
 
     - title: Destination
       required:
