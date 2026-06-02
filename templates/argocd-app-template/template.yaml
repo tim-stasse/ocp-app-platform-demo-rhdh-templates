@@ -110,9 +110,9 @@ spec:
               repoURL: ${{ parameters.repoUrl }}
               targetRevision: ${{ parameters.targetRevision }}
               path: ${{ parameters.path }}
-              {{- if parameters.extraSourceOptions -}}
+              {% if parameters.extraSourceOptions -%}
               ${{ parameters.extraSourceOptions | indent(14) }}
-              {{- endif -}}
+              {%- endif %}
             destination:
               server: ${{ parameters.clusterUrl }}
               namespace: ${{ parameters.namespace }}
