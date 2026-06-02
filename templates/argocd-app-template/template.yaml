@@ -102,4 +102,4 @@ spec:
             destination:
               server: ${{ parameters.clusterUrl }}
               namespace: ${{ parameters.namespace }}
-            ${{ parameters.extraOptions }}
+            ${{ parameters.extraOptions | indent(12) }}
