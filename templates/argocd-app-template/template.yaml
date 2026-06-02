@@ -1,0 +1,105 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: argocd-app-template
+  title: Argo CD Application Template
+  description: Use the kubernetes scaffolder to generate and apply an Argo CD Application manifest to the cluster
+  tags:
+    - openshift
+    - argocd
+    - task
+spec:
+  owner: platform-engineering
+  type: template
+  parameters:
+    - title: General
+      required:
+        - appName
+        - projectName
+      properties:
+        appName:
+          title: Argo CD App Name
+          type: string
+          description: The name of the Argo CD Application to create
+          ui:autofocus: true
+        projectName:
+          title: Argo CD Project Name
+          type: string
+          description: The name of the Argo CD Project to deploy the application into
+          default: default
+
+    - title: Source
+      required:
+        - repoUrl
+        - targetRevision
+        - path
+      properties:
+        repoUrl:
+          title: Repository URL
+          type: string
+          description: The URL of the git repository containing the application manifests (e.g. https://github.com/org/repo.git)
+        targetRevision:
+          title: Target Revision
+          type: string
+          description: The git revision to deploy (e.g. main, master, a specific branch, tag, or commit SHA)
+          default: main
+        path:
+          title: Path in Repository
+          type: string
+          description: The path within the repository where the application manifests are located (e.g. ./manifests)
+
+    - title: Destination
+      required:
+        - clusterUrl
+        - namespace
+      properties:
+        clusterUrl:
+          title: Cluster
+          type: string
+          description: The cluster to deploy the application to
+          default: https://kubernetes.default.svc
+        namespace:
+          title: Target Namespace
+          type: string
+          description: The namespace to deploy the application into
+          default: default
+
+    - title: Extra Options
+      required:
+        - extraOptions
+      properties:
+        extraOptions:
+          title: Extra Options
+          type: string
+          description: Additional options to add to the Argo CD Application spec in YAML format (e.g. syncPolicy, additional labels, etc.)
+          default: |
+            syncPolicy:
+              syncOptions:
+                - CreateNamespace=true
+              automated:
+                prune: true
+                selfHeal: true
+
+  steps:
+    - action: kube:apply
+      id: createArgoApp
+      name: Create Argo CD Application
+      input:
+        namespaced: true
+        clusterName: hub-cluster
+        manifest: |
+          apiVersion: argoproj.io/v1alpha1
+          kind: Application
+          metadata:
+            name: ${{ parameters.appName }}
+            namespace: rhdh-gitops
+          spec:
+            project: ${{ parameters.projectName }}
+            source:
+              repoURL: ${{ parameters.repoUrl }}
+              targetRevision: ${{ parameters.targetRevision }}
+              path: ${{ parameters.path }}
+            destination:
+              server: ${{ parameters.clusterUrl }}
+              namespace: ${{ parameters.namespace }}
+            ${{ parameters.extraOptions }}
