@@ -47,7 +47,6 @@ spec:
           title: Path in Repository
           type: string
           description: The path within the repository where the application manifests are located (e.g. ./manifests)
-          default: .
         extraSourceOptions:
           title: Extra Source Options
           type: string
